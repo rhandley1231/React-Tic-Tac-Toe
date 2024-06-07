@@ -1,28 +1,38 @@
 import { useState } from 'react';
-import './Player.css'
-export default function Player({ initialName, symbol }) {
+import './Player.css';
+export default function Player({
+  initialName,
+  symbol,
+  isActive,
+  onChangeName,
+}) {
   //We can use multiple state functions to create more dynamic code
   const [playerName, setPlayerName] = useState(initialName);
   const [isEditing, setIsEditing] = useState(false);
 
-  function handleEdit(){
+  function handleEdit() {
     //A best practice for updating a boolean state value is to use arrow function form
     setIsEditing((editing) => !editing);
-  };
+    if (isEditing) {
+      onChangeName(symbol, playerName);
+    }
+  }
 
-  //Two way binding allows us to listen to a change and feedback the value into the input 
-  function handleChange(event){
+  //Two way binding allows us to listen to a change and feedback the value into the input
+  function handleChange(event) {
     setPlayerName(event.target.value);
   }
 
   let editPlayerName = <span className="player-name">{playerName}</span>;
 
   if (isEditing) {
-    editPlayerName = <input type="text" required value={playerName} onChange={handleChange}/>;
+    editPlayerName = (
+      <input type="text" required value={playerName} onChange={handleChange} />
+    );
   }
 
   return (
-    <li>
+    <li className={isActive ? 'active' : undefined}>
       <span className="player">
         {editPlayerName}
         <span className="player-symbol">{symbol}</span>
